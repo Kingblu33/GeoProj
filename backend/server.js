@@ -57,6 +57,10 @@ app.get('/getDevicePlans', async (req, res) => {
     }
 });
 
+
+// change route to loginstall
+//log install will always be penske.
+
 app.post('/getdevice/:serialNumber', async (req, res) => {
     const serialNumber = req.params.serialNumber;
     try {

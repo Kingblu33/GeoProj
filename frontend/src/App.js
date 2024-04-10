@@ -78,10 +78,18 @@ function App() {
 
 
   return (
-
-    <div className="max-w-md mx-auto p-6 bg-black rounded-md shadow-md m-9 text-white">
+    <div className="max-w-md mx-auto p-10 bg-black rounded-md shadow-md m-9 text-white">
       <form onSubmit={submit}>
-        <label className="block mb-2 text-white">Enter Serial Number</label>
+      <label className="text-gray-300">
+      Choose a provider
+      <select className="block w-full border border-gray-600 rounded-md px-3 py-2 bg-gray-900 text-white">
+        <option value={"Geotab"}>Geotab</option>
+        <option value={"Geotab"}>Zonar</option>
+        <option value={"Geotab"}>Samsara</option>
+      </select>
+    </label>
+        
+        <label className="block mb-2">Enter Serial Number</label>
         <input
           type="text"
           value={serialNumber}
@@ -89,17 +97,21 @@ function App() {
           className="w-full border border-gray-600 rounded-md px-3 py-2 mb-4 focus:outline-none focus:border-blue-500 bg-gray-900 text-white"
         />
         <button
-          type='submit'
-          className={`w-full py-2 rounded-md focus:outline-none ${serialNumber.length < 5 || serialNumber.length > 12 ? 'bg-gray-500 text-gray-300 cursor-not-allowed' : 'bg-blue-500 text-white hover:bg-blue-600 focus:bg-blue-600'}`}
+          type="submit"
+          className={`w-full py-2 rounded-md focus:outline-none ${
+            serialNumber.length < 5 || serialNumber.length > 12
+              ? 'bg-gray-500 text-gray-300 cursor-not-allowed'
+              : 'bg-blue-500 text-white hover:bg-blue-600 focus:bg-blue-600'
+          }`}
           disabled={serialNumber.length < 5 || serialNumber.length > 12}
         >
           Submit
         </button>
       </form>
-
+  
       {data && data.device && error === null ? (
-        <div className='max-h-96 overflow-y-auto mt-6'>
-          <table className="w-full mt-6">
+        <div className="max-h-96 overflow-y-auto mt-6">
+          <table className="w-full">
             <thead>
               <tr>
                 <th className="border border-gray-600 px-4 py-2">Status</th>
@@ -123,10 +135,8 @@ function App() {
           <p className="text-red-600 mb-2">{error.serialNumber}</p>
           <p className="text-red-600">{error.message}</p>
         </div>
-      ) : ""}
+      ) : null}
     </div>
-
-
   );
 }
 
