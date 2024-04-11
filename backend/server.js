@@ -12,19 +12,29 @@ app.use(cors({
 
 let apiKey = "";
 let sessionId = "";
+const authenticate = async () =>{
+ 
+    const response = await axios.post(url,{
+        'method': 'Authenticate',
+                params: {
+                    'username': username,
+                    'password': password
+                }
+    })
+return response;
+}
 
 app.post("/authenticate", async (req, res) => {
     const username = process.env.CRED_DATA_USERNAME1
     const password = process.env.CRED_DATA_PASSWORD2
     try {
-        const response = await axios.post(url,
-            {
-                'method': 'Authenticate',
-                params: {
-                    'username': username,
-                    'password': password
-                }
-            });
+        const response = await axios.post(url,{
+            'method': 'Authenticate',
+                    params: {
+                        'username': username,
+                        'password': password
+                    }
+        })
         if (response !== null && response.data) {
             apiKey = response.data.result.userId;
             sessionId = response.data.result.sessionId
@@ -35,6 +45,7 @@ app.post("/authenticate", async (req, res) => {
         }
 
     } catch (error) {
+        
         console.log(error)
         res.status(500).json({ error: error.message })
     }
@@ -105,7 +116,9 @@ app.post('/getdevice/:serialNumber', async (req, res) => {
                 lastCom: lastCommunicationDate
             });
         } else if(response.data && response.data.error){
+            console.log("Api Key Error")
             res.status(400).json({error: response.data.error})
+
         }
         else {
             res.json(response.data);
@@ -116,7 +129,28 @@ app.post('/getdevice/:serialNumber', async (req, res) => {
     }
 });
 
-
+app.post("/loginstall",async(req,res)=>{
+try{
+    const response = await axios.post(url,{
+        id: -1,
+        "method": "LogInstall",
+        "params":{
+            apiKey: apiKey,
+            sessionId: sessionId,
+            serialNo: "G996DKB6SHP6",
+            installerCompany:"Penske",
+            installerName:"0000"
+        }
+        
+    })
+    if(!response.data){
+        console.log("Not returning anything")
+    }
+    res.json(response.data);
+}catch(error){
+    res.status(500).json({error:error.message})
+}
+})
 // Eg of returned data: 
 //     "result": {
 //         "request": {
@@ -140,6 +174,11 @@ app.post('/getdevice/:serialNumber', async (req, res) => {
 //     }
 // }
 
+process.on('SIGINT', function() {
+    console.log( "\nGracefully shutting down from SIGINT (Ctrl-C)" );
+    // some other closing procedures go here
+    process.exit(9);
+});
 
 app.listen(5000, () => {
     console.log('Server is running on port 5000');
