@@ -61,10 +61,8 @@ app.get('/getDevicePlans', async (req, res) => {
 // change route to loginstall
 //log install will always be penske.
 
-app.post('/getdevice/:serialNumber', async (req, res) => {
-    const serialNumber = req.params.serialNumber;
-    try {
-        const response = await axios.post(url, {
+const getDevice = async (serialNumber) => {
+    const response =  await axios.post(url,{
             id: -1,
             method: "LookupDevice",
             params: {
@@ -72,7 +70,15 @@ app.post('/getdevice/:serialNumber', async (req, res) => {
                 sessionId: sessionId,
                 serialNo: serialNumber
             }
-        });
+    })
+
+    return response
+}
+
+app.post('/getdevice/:serialNumber', async (req, res) => {
+    const serialNumber = req.params.serialNumber;
+    try {
+        const response = await getDevice(serialNumber);
 
         if (Object.keys(response.data).length === 0) {
             const error ={error:{message: 'Device not found' , serialNumber: serialNumber}}
