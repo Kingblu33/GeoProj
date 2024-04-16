@@ -33,7 +33,7 @@ const Result = () => {
                     {[
                         { label: 'Status', value: data.status },
                         { label: 'Device', value: data.device.name },
-                        { label: 'Date', value: data.lastCom },
+                        { label: 'Last Reported Date', value: data.lastCom },
                         { label: 'Serial Number', value: data.serialNumber },
                     ].map((item, index) => (
                         <div key={index} className="flex flex-col justify-between p-4 border rounded-lg">

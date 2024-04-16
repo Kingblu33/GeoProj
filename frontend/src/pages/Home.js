@@ -2,13 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 // import { logDevice, getDevice, authenticateUser, handleAuthenticationReset } from "../functions/api"
 const Home = () => {
-    const [authenticate, setAuthenticate] = useState(
-        localStorage.getItem("authenticated")
-    );
+    const [authenticate, setAuthenticate] = useState(true);
     const [serialNumber, setSerialNumber] = useState("");
     const [location, setLocation] = useState("");
     const [error, setError] = useState(null);
-    const [data, setData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -38,12 +35,13 @@ const Home = () => {
             .then((responseData) => {
                 if (responseData.error) {
                     //think about remove this considering we arent really using it anymore
-                    setData(null);
+                    // setData(null);
                     setError(responseData);
                     console.log(error);
                 } else {
                     setError(null);
-                    setData(responseData);
+                    navigate('/results', { state: { data: responseData } })
+                    // setData(responseData);
                     console.log(responseData);
                 }
             })
@@ -71,7 +69,7 @@ const Home = () => {
             })
             .then((responseData) => {
                 if (responseData.error) {
-                    setData(null);
+                    // setData(null);
                     setError(responseData);
                     setIsLoading(false);
                     console.log(error);
@@ -98,7 +96,7 @@ const Home = () => {
             .then((data) => {
                 if (data !== null) {
                     setAuthenticate(true);
-                    localStorage.setItem("authenticated", "true");
+                    // localStorage.setItem("authenticated", "true");
                     console.log("Authenticated");
                     setError(null);
                     getDevice(serialNumber);
@@ -116,7 +114,6 @@ const Home = () => {
     const handleAuthenticationReset = () => {
         console.log("Authentication reset. Re-authenticating...");
         setAuthenticate(false);
-        localStorage.removeItem("authenticated");
         authenticateUser();
     };
 
@@ -124,7 +121,7 @@ const Home = () => {
         if (!authenticate) {
             authenticateUser();
         }
-    }, [authenticate]);
+    }, [authenticate,serialNumber]);
 
     return (
         <div className="min-w-screen min-h-screen bg-gray-900 flex items-center justify-center px-5 py-5 relative">
@@ -161,6 +158,8 @@ const Home = () => {
                                     className="block w-full border border-gray-600 rounded-md px-3 py-2 bg-white text-black"
                                 >
                                     <option value="Geotab">Geotab</option>
+                                    <option value="Geotab">Samsara</option>
+                                    <option value="Geotab">Zonar</option>
                                 </select>
                             </div>
                             <div className="mb-4">
