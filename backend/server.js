@@ -12,17 +12,16 @@ app.use(cors({
 
 let apiKey = "";
 let sessionId = "";
-const authenticate = async () =>{
- 
-    const response = await axios.post(url,{
-        'method': 'Authenticate',
-                params: {
-                    'username': username,
-                    'password': password
-                }
-    })
-return response;
-}
+// const authenticate = async () =>{
+//     const response = await axios.post(url,{
+//         'method': 'Authenticate',
+//                 params: {
+//                     'username': username,
+//                     'password': password
+//                 }
+//     })
+// return response;
+// }
 
 app.post("/authenticate", async (req, res) => {
     const username = process.env.CRED_DATA_USERNAME1
@@ -129,28 +128,62 @@ app.post('/getdevice/:serialNumber', async (req, res) => {
     }
 });
 
-app.post("/loginstall",async(req,res)=>{
+app.post("/loginstall/:serialNumber/:location",async(req,res)=>{
+    const serialNumber = req.params.serialNumber;
+    const location = req.params.location;
 try{
+    //Test device "G996DKB6SHP6"
     const response = await axios.post(url,{
         id: -1,
         "method": "LogInstall",
         "params":{
             apiKey: apiKey,
             sessionId: sessionId,
-            serialNo: "G996DKB6SHP6",
+            serialNo: serialNumber,
             installerCompany:"Penske",
             installerName:"0000"
         }
         
     })
-    if(!response.data){
-        console.log("Not returning anything")
+    if (Object.keys(response.data).length === 0) {
+        const error ={error:{message: 'Device not found' , serialNumber: serialNumber}}
+        res.status(404).json(error)
+
+    } else if (response.data && response.data.result && response.data.result.request && response.data.result.request.device) {
+        const { serial, deviceType } = response.data.result.request.device;
+        const lastCommunicationDate = new Date(response.data.result.lastServerCommunication);
+        const currentDate = new Date();
+        const differenceInDays = Math.floor((currentDate - lastCommunicationDate) / (1000 * 60 * 60 * 24));
+
+        let status;
+        if (differenceInDays <= 3) {
+            status = 'Reporting';
+        } else {
+            status = 'Not Reporting';
+        }
+
+        res.json({ 
+            status: status,
+            serialNumber: serial,
+            device: deviceType,
+            serialNumber: serialNumber,
+            lastCom: lastCommunicationDate,
+            location: location
+        });
+    } else if(response.data && response.data.error){
+        console.log("Api Key Error")
+        res.status(400).json({error: response.data.error})
+
     }
-    res.json(response.data);
-}catch(error){
-    res.status(500).json({error:error.message})
-}
-})
+    else {
+        res.json(response.data);
+    }
+} catch (error) {
+    // console.log(error)
+    res.status(500).json({error: error.message})
+}});
+    
+
 // Eg of returned data: 
 //     "result": {
 //         "request": {
