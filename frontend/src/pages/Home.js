@@ -52,7 +52,7 @@ const Home = () => {
     };
     const getDevice = (serial) => {
         setIsLoading(true);
-        fetch(`http://192.168.0.104:5000/getdevice/${serial}`, {
+        fetch(`http://localhost:5000/getdevice/${serial}`, {
             method: "POST",
         })
             .then((response) => {
