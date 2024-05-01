@@ -198,7 +198,7 @@ const Home = () => {
                                 Submit
                             </button>
                         </form>
-                        <Link to={"/help"} className="block text-xs font-semibold text-blue-300 mt-4">Need Help?</Link>
+                        <Link to={"/help"} className="font-mono block text-xs font-semibold text-blue-300 mt-4">Need Help?</Link>
                         {error !== null && error.message ? (
                             <div className="mt-6">
                                 <p className="text-red-600 mb-2">{error.serialNumber}</p>
