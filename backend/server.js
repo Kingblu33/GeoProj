@@ -6,7 +6,8 @@ const app = express();
 const url = "https://myadminapi.geotab.com/v2/MyAdminApi.ashx"
 
 app.use(cors({
-    origin: 'http://localhost:3000',
+    // origin: 'http://localhost:3000',
+    origin: '*',
     credentials: true
 }));
 
@@ -72,6 +73,7 @@ app.get('/getDevicePlans', async (req, res) => {
 //log install will always be penske.
 
 const getDevice = async (serialNumber) => {
+    console.log("Calling get device")
     const response =  await axios.post(url,{
             id: -1,
             method: "LookupDevice",
@@ -213,6 +215,6 @@ process.on('SIGINT', function() {
     process.exit(9);
 });
 
-app.listen(5000, () => {
+app.listen(5000,'0.0.0.0', () => {
     console.log('Server is running on port 5000');
 });

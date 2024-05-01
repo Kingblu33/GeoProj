@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 // import { logDevice, getDevice, authenticateUser, handleAuthenticationReset } from "../functions/api"
 const Home = () => {
     const [authenticate, setAuthenticate] = useState(true);
@@ -52,7 +52,7 @@ const Home = () => {
     };
     const getDevice = (serial) => {
         setIsLoading(true);
-        fetch(`http://localhost:5000/getdevice/${serial}`, {
+        fetch(`http://192.168.0.104:5000/getdevice/${serial}`, {
             method: "POST",
         })
             .then((response) => {
@@ -191,12 +191,14 @@ const Home = () => {
                                 className={`w-full py-2 rounded-md focus:outline-none ${serialNumber.length < 5 || serialNumber.length > 12
                                     ? "bg-gray-500 text-gray-300 cursor-not-allowed"
                                     : "bg-blue-500 text-white hover:bg-blue-600 focus:bg-blue-600"
+                                    
                                     }`}
                                 disabled={serialNumber.length < 5 || serialNumber.length > 12}
                             >
                                 Submit
                             </button>
                         </form>
+                        <Link to={"/help"} className="block text-xs font-semibold text-blue-300 mt-4">Need Help?</Link>
                         {error !== null && error.message ? (
                             <div className="mt-6">
                                 <p className="text-red-600 mb-2">{error.serialNumber}</p>
