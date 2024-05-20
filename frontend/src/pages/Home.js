@@ -1,66 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate,Link } from "react-router-dom";
-// import { logDevice, getDevice, authenticateUser, handleAuthenticationReset } from "../functions/api"
+import { getDevice } from "../Helpers/deviceTroubleshoot";
+
 const Home = () => {
-    const [authenticate, setAuthenticate] = useState(true);
     const [serialNumber, setSerialNumber] = useState("");
     const [location, setLocation] = useState("");
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
-    //Submit form and calls get device function
     const submit = (e) => {
         e.preventDefault();
         getDevice(serialNumber);
-    };
-
-    //currently alternating between this and get device
-    const logDevice = (serial, location) => {
-        fetch(`http://localhost:5000/loginstall/${serial}/${location}`, {
-            method: "POST",
-        })
-            .then((response) => {
-                if (response.status === 400) {
-                    console.log("Need to reauth");
-                    handleAuthenticationReset();
-                    throw new Error("Authenticating");
-                } else if (response.status === 404) {
-                    console.log(response);
-                    throw new Error("Device not found");
-                } else {
-                    return response.json();
-                }
-            })
-            .then((responseData) => {
-                if (responseData.error) {
-                    //think about remove this considering we arent really using it anymore
-                    // setData(null);
-                    setError(responseData);
-                    console.log(error);
-                } else {
-                    setError(null);
-                    navigate('/results', { state: { data: responseData } })
-                    // setData(responseData);
-                    console.log(responseData);
-                }
-            })
-            .catch((err) => {
-                console.log("Server Encountered an error: ", err);
-                setError(err);
-            });
-    };
+    }
     const getDevice = (serial) => {
         setIsLoading(true);
         fetch(`http://localhost:5000/getdevice/${serial}`, {
             method: "POST",
         })
             .then((response) => {
-                if (response.status === 400) {
-                    console.log("Need to reauth");
-                    handleAuthenticationReset();
-                    throw new Error("Authenticating");
-                } else if (response.status === 404) {
+                if (response.status === 404) {
                     console.log(response);
                     throw new Error("Device not found");
                 } else {
@@ -69,7 +28,6 @@ const Home = () => {
             })
             .then((responseData) => {
                 if (responseData.error) {
-                    // setData(null);
                     setError(responseData);
                     setIsLoading(false);
                     console.log(error);
@@ -86,42 +44,6 @@ const Home = () => {
             });
     };
 
-    //consider moving this to the backend
-    const authenticateUser = () => {
-        setIsLoading(true);
-        fetch("http://localhost:5000/authenticate", {
-            method: "POST",
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data !== null) {
-                    setAuthenticate(true);
-                    // localStorage.setItem("authenticated", "true");
-                    console.log("Authenticated");
-                    setError(null);
-                    getDevice(serialNumber);
-                }
-            })
-            .catch((error) => {
-                console.log(error)
-                setIsLoading(false);
-                setError(error);
-            });
-    };
-
-
-    // this as well to the backend
-    const handleAuthenticationReset = () => {
-        console.log("Authentication reset. Re-authenticating...");
-        setAuthenticate(false);
-        authenticateUser();
-    };
-
-    useEffect(() => {
-        if (!authenticate) {
-            authenticateUser();
-        }
-    }, [authenticate,serialNumber]);
 
     return (
         <div className="min-w-screen min-h-screen bg-gray-900 flex items-center justify-center px-5 py-5 relative">

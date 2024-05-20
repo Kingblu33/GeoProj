@@ -35,3 +35,64 @@ export const GeotabData = [
     },
 ];
 
+
+export const getDevice = async (serial) => {
+    // setIsLoading(true);
+    fetch(`http://localhost:5000/getdevice/${serial}`, {
+        method: "POST",
+    })
+        .then((response) => {
+            if (response.status === 404) {
+                throw new Error("Device not found");
+            } else { 
+                return response.json();
+            }
+        })
+        .then((responseData) => {
+            if (responseData.error) {
+                throw new Error(responseData);
+            } else {
+               return responseData
+            }
+        })
+        .catch((err) => {
+            // setIsLoading(false);
+            console.log("Server Encountered an error: ", err);
+            // setError(err);
+        });
+};
+
+// const logDevice = (serial, location) => {
+//     fetch(`http://localhost:5000/loginstall/${serial}/${location}`, {
+//         method: "POST",
+//     })
+//         .then((response) => {
+//             if (response.status === 400) {
+//                 console.log("Need to reauth");
+//                 // handleAuthenticationReset();
+//                 throw new Error("Authenticating");
+//             } else if (response.status === 404) {
+//                 console.log(response);
+//                 throw new Error("Device not found");
+//             } else {
+//                 return response.json();
+//             }
+//         })
+//         .then((responseData) => {
+//             if (responseData.error) {
+//                 //think about remove this considering we arent really using it anymore
+//                 // setData(null);
+//                 setError(responseData);
+//                 console.log(error);
+//             } else {
+//                 setError(null);
+//                 navigate('/results', { state: { data: responseData } })
+//                 // setData(responseData);
+//                 console.log(responseData);
+//             }
+//         })
+//         .catch((err) => {
+//             console.log("Server Encountered an error: ", err);
+//             setError(err);
+//         });
+// };
