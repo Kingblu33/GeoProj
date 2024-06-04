@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate,Link } from "react-router-dom";
-import { getDevice } from "../Helpers/deviceTroubleshoot";
+import image2 from "../Images/Tractor divided highway.jpeg"
 
 const Home = () => {
     const [serialNumber, setSerialNumber] = useState("");
@@ -44,7 +44,6 @@ const Home = () => {
             });
     };
 
-
     return (
         <div className="min-w-screen min-h-screen bg-gray-900 flex items-center justify-center px-5 py-5 relative">
             {isLoading && (
@@ -55,11 +54,11 @@ const Home = () => {
             {isLoading && (
                 <div className="absolute inset-0 z-10 bg-black opacity-50"></div>
             )}
-            <div className="bg-gray-100 text-gray-500 rounded-3xl shadow-xl w-full md:max-w-4xl overflow-hidden">
+            <div className="bg-gray-100 text-gray-500 rounded-3xl shadow-xl w-full md:max-w-4xl overflow-hidden" style={{ width: '90%', height: '90%' }}>
                 <div className="md:flex w-full">
                     <div className="md:w-1/2 py-10 px-10 relative">
                         <img
-                            src="https://cdn.continental.com/fileadmin/__imported/sites/corporate/_international/english/hubpages/10_20press/01_press_releases/06_20cvt/2023/continental_pp_fleets.jpg"
+                            src={image2}
                             className="absolute inset-0 w-full h-full object-cover"
                             alt="Truck with trailer"
                         />
@@ -80,8 +79,8 @@ const Home = () => {
                                     className="font-mono block w-full border border-gray-600 rounded-md px-3 py-2 bg-white text-black"
                                 >
                                     <option value="Geotab">Geotab</option>
-                                    <option value="Geotab">Samsara</option>
-                                    <option value="Geotab">Zonar</option>
+                                    <option value="Samsara">Samsara</option>
+                                    <option value="Zonar">Zonar</option>
                                 </select>
                             </div>
                             <div className="mb-3">
@@ -120,7 +119,7 @@ const Home = () => {
                                 Submit
                             </button>
                         </form>
-                        <Link to={"/help"} className="font-mono block text-xs font-semibold text-blue-300 mt-4">Need Help?</Link>
+                        <Link to={"/content"} className="font-mono block text-xs font-semibold text-blue-300 mt-4">Need Help?</Link>
                         {error !== null && error.message ? (
                             <div className="mt-6">
                                 <p className="text-red-600 mb-2">{error.serialNumber}</p>
@@ -132,6 +131,7 @@ const Home = () => {
             </div>
         </div>
     );
+    
 };
 
 export default Home;

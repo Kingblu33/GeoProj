@@ -1,7 +1,7 @@
+require('dotenv').config()
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
-require('dotenv').config()
 const app = express();
 const url = "https://myadminapi.geotab.com/v2/MyAdminApi.ashx"
 
@@ -29,8 +29,6 @@ const authenticate = async () =>{
 apiKey = response.data.result.userId;
 sessionId = response.data.result.sessionId
 
-// console.log(apiKey)
-
 return response;
 }
 
@@ -40,12 +38,8 @@ app.post("/authenticate", async (req, res) => {
         if (response !== null && response.data) {
             apiKey = response.data.result.userId;
             sessionId = response.data.result.sessionId
-
-        
             res.json(response.data);
-
         }
-
     } catch (error) {
         
         console.log(error)
@@ -64,7 +58,6 @@ const getDevice = async (serialNumber) => {
                 serialNo: serialNumber
             }
     })
-
     return response
 }
 
@@ -86,15 +79,13 @@ app.post('/getdevice/:serialNumber', async (req, res) => {
                 const lastCommunicationDate = new Date(response.data.result.lastServerCommunication);
                 const currentDate = new Date();
                 const differenceInDays = Math.floor((currentDate - lastCommunicationDate) / (1000 * 60 * 60 * 24));
-    
                 let status;
                 if (differenceInDays <= 3) {
                     status = 'Reporting';
                 } else {
                     status = 'Not Reporting';
                 }
-                
-
+            
                 res.json({ 
                     status: status,
                     serialNumber: serial,
@@ -104,11 +95,13 @@ app.post('/getdevice/:serialNumber', async (req, res) => {
                 });
                 success = true;
             } else if(response.data && response.data.error){
+                //this should be the onl
                 console.log("Api Key Error")
                 console.log("Authenticating")
+                await new Promise(resolve => setTimeout(resolve, 1000)); //awaiting between retrys so the server doesnt get overloaded 
                 await authenticate();
                 retry += 1;
-                // res.status(400).json({error: response.data.error})
+                
             }
             else {
                 res.json(response.data);
@@ -124,7 +117,6 @@ app.post("/loginstall/:serialNumber/:location",async(req,res)=>{
     const serialNumber = req.params.serialNumber;
     const location = req.params.location;
 try{
-    //Test device "G996DKB6SHP6"
     const response = await axios.post(url,{
         id: -1,
         "method": "LogInstall",

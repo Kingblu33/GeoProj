@@ -1,10 +1,10 @@
 import React from 'react';
-import { useLocation, Link, useNavigate } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 
 const Result = () => {
     const location = useLocation();
     const { data } = location.state || {};
-    // const navigate = useNavigate();
+
 
     if (!data) {
         return (
@@ -44,13 +44,33 @@ const Result = () => {
                 </div>
 
                 <div className="mt-8">
-                    <Link
-                        to="/Home"
-                        className="font-mono bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full block w-full text-center"
-                    >
-                        Back to Home
-                    </Link>
+                    {
+                        data.status === "Not Reporting" ?
+                            <div className="flex justify-between space-x-4">
+                                <Link
+                                    to="/help"
+                                    className="font-mono bg-red-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full block w-1/2 text-center"
+                                >
+                                    Troubleshoot
+                                </Link>
+                                <Link
+                                    to="/Home"
+                                    className="font-mono bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full block w-1/2 text-center"
+                                >
+                                    Back to Home
+                                </Link>
+                            </div>
+                            :
+                            <Link
+                                to="/Home"
+                                className="font-mono bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full block w-full text-center"
+                            >
+                                Back to Home
+                            </Link>
+                    }
                 </div>
+
+
             </div>
         </div>
     );
