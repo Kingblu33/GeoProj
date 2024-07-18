@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { FaHome } from "react-icons/fa"
-import { FaFolder } from "react-icons/fa";
-import { FaFile } from "react-icons/fa";
-import {categories} from "../Helpers/helperContent"
+import { FaHome,FaFolder,FaFile } from "react-icons/fa"
+import { categories } from "../Helpers/helperContent"
 
 const Content = () => {
 
@@ -36,22 +34,15 @@ const Content = () => {
                                 </div>
                                 {categories.map((category, index) => (
                                     <div key={index}>
-                                        <div
-                                            className="flex items-center px-3 py-2 text-gray-200 transition-colors duration-300 transform rounded-lg hover:bg-gray-700 cursor-pointer"
-                                            onClick={() => handleCategoryChange(category)}
-                                        >
+                                        <div className="flex items-center px-3 py-2 text-gray-200 transition-colors duration-300 transform rounded-lg hover:bg-gray-700 cursor-pointer" onClick={() => handleCategoryChange(category)}>
                                             <FaFolder />
                                             <span className="mx-2 text-sm font-medium">{category.name}</span>
                                         </div>
                                         {selectedCategory === category.name && (
                                             <div className="ml-4 mt-2 space-y-3">
                                                 {category.subcategories.map((subcategory, subIndex) => (
-                                                    <div
-                                                        key={subIndex}
-                                                        className={`flex items-center px-3 py-2 text-gray-200 transition-colors duration-300 transform rounded-lg hover:bg-gray-600 cursor-pointer ${selectedSubcategory === subcategory ? 'bg-gray-600' : ''}`}
-                                                        onClick={() => handleSubcategoryChange(subcategory, category.files[subIndex])}
-                                                    >
-                                                        <FaFile/>
+                                                    <div key={subIndex} className={`flex items-center px-3 py-2 text-gray-200 transition-colors duration-300 transform rounded-lg hover:bg-gray-600 cursor-pointer ${selectedSubcategory === subcategory ? 'bg-gray-600' : ''}`} onClick={() => handleSubcategoryChange(subcategory, category.files[subIndex])}>
+                                                        <FaFile />
                                                         <span className="mx-2 text-sm font-medium">{subcategory}</span>
                                                     </div>
                                                 ))}

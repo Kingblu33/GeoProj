@@ -28,7 +28,7 @@ export const items = [
         backgroundImage:
             "https://www.geotab.com/CMS-Media-production/Blog/NA/March_2019/First_Look/blog-geotab-go9-hero@2x.jpg",
         links: [
-            { href: "/Home", label: "Instructions" },
+            { href: "/NotFound", label: "Instructions" },
             { href: "/Home", label: "Device Check" },
             { href: "/order-device", label: "Order Device" },
         ],
