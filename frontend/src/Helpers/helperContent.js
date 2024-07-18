@@ -30,7 +30,7 @@ export const items = [
         links: [
             { href: "/NotFound", label: "Instructions" },
             { href: "/Home", label: "Device Check" },
-            { href: "/order-device", label: "Order Device" },
+            { href: "/NotFound", label: "Order Device" },
         ],
     },
     {
