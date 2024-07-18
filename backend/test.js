@@ -26,10 +26,6 @@ api.authenticate(success => {
 });
 
 
-app.get('/', ((req, res) => {
-    res.redirect('/test');
-}))
-
 app.get('/getdevices', async (req, res) => {
     try {
         const devices = await api.call('Get',

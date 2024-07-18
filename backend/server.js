@@ -41,8 +41,6 @@ app.post("/authenticate", async (req, res) => {
             res.json(response.data);
         }
     } catch (error) {
-        
-        console.log(error)
         res.status(500).json({ error: error.message })
     }
 })
@@ -95,7 +93,6 @@ app.post('/getdevice/:serialNumber', async (req, res) => {
                 });
                 success = true;
             } else if(response.data && response.data.error){
-                //this should be the onl
                 console.log("Api Key Error")
                 console.log("Authenticating")
                 await new Promise(resolve => setTimeout(resolve, 1000)); //awaiting between retrys so the server doesnt get overloaded 
