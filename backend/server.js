@@ -109,7 +109,7 @@ app.post('/getdevice/:serialNumber', async (req, res) => {
     }
 
 });
-
+// Note: Remember that this route isnt used as this is a test and log updates things on the backend for geotab.
 app.post("/loginstall/:serialNumber/:location",async(req,res)=>{
     const serialNumber = req.params.serialNumber;
     const location = req.params.location;
